@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>LR4</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"
+		integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+		crossorigin="anonymous">
+	<style>
+
+		h2 {
+			margin-top: 10px;
+		}
+
+		body {
+			margin-left: 10px;
+		}
+
+		tr:hover {
+			background: lightgray;
+		}
+
+		table {
+			border-right: 2px lightgray solid;
+		}
+
+		input {
+			display: inline-block;
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+		crossorigin="anonymous">
+
+	</script>
+	<script>
+		function add() {
+			if ($('#name').val() != '' && $('#table').val() == '') {
+				let data = "<tr><td>";
+				data += $('#name').val();
+				data += "</td><td>";
+				data += $('#price').val();
+				data += '</td><td><input type="button" value="Add product to checkout" onclick="add_checkout(this)"></td></tr>';
+				$('#table > tbody:last-child').append(data);
+				$('#name').val('');
+				$('#price').val('');
+				console.log(data);
+			}
+		}
+
+		function count() {
+			let table = $('#tbody_checkout').children();
+			let len = table.length;
+			let count = 0;
+			for (let i = 0; i < len; i++) {
+				count += parseInt(table.eq(i).children().eq(1)[0].textContent) *
+					parseInt(table.eq(i).children().eq(2)[0].textContent);
+				console.log(table.eq(i).children().eq(1)[0].textContent);
+			}
+			console.log(count);
+			$('h2').remove();
+			$('#form').append('<h2> Total price: ' + count + '</h2>');
+		}
+
+		function add_checkout(doc) {
+			let row = $(doc.parentElement.parentElement);
+			let table = $('#tbody_checkout').children();
+			let len = table.length;
+			for (let i = 0; i < len; i++)
+				if (table.eq(i).children().eq(0)[0].textContent === row.children().eq(0)[0].textContent)
+				{
+					table.eq(i).children().eq(2)[0].textContent = parseInt(table.eq(i).children().eq(2)[0].textContent) + 1;
+					return ;
+				}
+			let data = "<tr><td>";
+			data += row.children().eq(0)[0].textContent;
+			data += "</td><td>";
+			data += row.children().eq(1)[0].textContent;
+			data += '</td><td>1</td></tr>';
+			$('#table_checkout > tbody:last-child').append(data);
+		}
+	</script>
+</head>
+
+<body>
+	<div class="row">
+		<table class="table col-6" id="table">
+			<thead>
+				<tr>
+					<th>Product name</th>
+					<th>Price</th>
+					<th>Add to checkout</th>
+				</tr>
+			</thead>
+			<tbody id='tbody'>
+				<tr>
+					<td>Phone</td>
+					<td>200</td>
+					<td><input type="button" value="Add product to checkout" onclick="add_checkout(this)"></td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table col-6" id="table_checkout">
+			<thead>
+				<tr>
+					<th>Product name</th>
+					<th>Price</th>
+					<th>Quantity</th>
+				</tr>
+			</thead>
+			<tbody id='tbody_checkout'>
+			</tbody>
+		</table>
+	</div>
+	<div class="row" id="form">
+		<div class="col-6">
+			Product name:
+			<div><input type="text" name="Name" id="name"></div>
+			Product price:
+			<div><input type="number" name="Prince" id="price"></div>
+			<div><input type="button" value="Add product to base" onclick="add()" style="margin: 10px 0px 10px 0px"></div>
+			<div><input type="button" value="Count" onclick="count()"></div>
+		</div>
+	</div>
+</body>
+</html>
